@@ -331,7 +331,7 @@ void LatticeBoltzmann::print(const char * Namefile){
 
 void StartAnimation(void){
   cout<<"set terminal gif animate"<<endl; 
-  cout<<"set output 'fases.gif'"<<endl;
+  cout<<"set output 'phases.gif'"<<endl;
   cout<<"unset key"<<endl;
   cout<<"set size ratio 4"<<endl;
   cout<<"set xrange [0:"<<Lx<<"]"<<endl;
