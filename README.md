@@ -40,7 +40,7 @@ To compile and run the simulation, follow these steps:
 
 2. Compile the simulation:
     ```bash
-    g++ -O3 -fopenmp multifase.cpp -o multifase
+    g++ -O3 -fopenmp multiphase.cpp -o multiphase
     ```
 
 ## Usage
@@ -49,7 +49,7 @@ To run the simulation and generate the output for Gnuplot, use the following com
 
 1. Execute the compiled program:
     ```bash
-    ./multifase | gnuplot
+    ./multiphase | gnuplot
     ```
 
 This will run the simulation and pipe the output directly to Gnuplot for rendering the results.
