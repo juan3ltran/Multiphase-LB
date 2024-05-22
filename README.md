@@ -34,8 +34,8 @@ To compile and run the simulation, follow these steps:
 
 1. Clone the repository:
     ```bash
-    git clone <repository-url>
-    cd <repository-directory>
+    git clone https://github.com/juan3ltran/Multiphase-LB.git
+    cd MULTIPHASE-LB
     ```
 
 2. Compile the simulation:
