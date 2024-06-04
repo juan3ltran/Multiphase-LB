@@ -1,4 +1,4 @@
-#include"Latticeboltzmann.h"
+#include"Latticeboltzmann.hpp"
 #include<fstream>
 
 LatticeBoltzmann::LatticeBoltzmann(void){

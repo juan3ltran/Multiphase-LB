@@ -1,6 +1,6 @@
 
-#include"animation.h"
-#include"Latticeboltzmann.h"
+#include"animation.hpp"
+#include"Latticeboltzmann.hpp"
 
 
 int main(void){

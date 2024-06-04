@@ -1,4 +1,4 @@
-#include "vector.h"
+#include "vector.hpp"
 
 // Initialize the vector
 void vector3D::load(double x0, double y0, double z0) {

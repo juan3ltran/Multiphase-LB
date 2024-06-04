@@ -1,5 +1,5 @@
-#include"constants.h"
-#include"vector.h"
+#include"constants.hpp"
+#include"vector.hpp"
 
 class LatticeBoltzmann{
 private:

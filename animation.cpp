@@ -1,6 +1,6 @@
 #include <iostream>
-#include "animation.h"
-#include "constants.h"  
+#include "animation.hpp"
+#include "constants.hpp"  
 
 using std::cout;
 using std::endl;
