@@ -35,12 +35,12 @@ To compile and run the simulation, follow these steps:
 1. Clone the repository:
     ```bash
     git clone https://github.com/juan3ltran/Multiphase-LB.git
-    cd MULTIPHASE-LB
+    cd Multiphase-LB
     ```
 
-2. Compile the simulation:
+2. Compile the simulation using the provided Makefile:
     ```bash
-    g++ -O3 -fopenmp multiphase.cpp -o multiphase
+    make
     ```
 
 ## Usage
@@ -49,7 +49,7 @@ To run the simulation and generate the output for Gnuplot, use the following com
 
 1. Execute the compiled program:
     ```bash
-    ./multiphase | gnuplot
+    ./Multiphase | gnuplot
     ```
 
 This will run the simulation and pipe the output directly to Gnuplot for rendering the results.
@@ -63,4 +63,3 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 For any questions or suggestions, feel free to reach out:
 
 - **Juan José** - jubeltranr@unal.edu.co / beltranjuanjo.r@gmail.com
-

@@ -4,12 +4,9 @@ LDFLAGS = -fopenmp
 SOURCES = main.cpp Latticeboltzmann.cpp animation.cpp vector.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 EXECUTABLE = Multiphase
-GIF = phases.gif
 
-all: $(GIF)
+all: $(EXECUTABLE)
 
-$(GIF):$(EXECUTABLE)
-	./$< |gnuplot
 
 $(EXECUTABLE): $(OBJECTS)
 	$(CXX) $(OBJECTS) $(LDFLAGS) -o $@ 
