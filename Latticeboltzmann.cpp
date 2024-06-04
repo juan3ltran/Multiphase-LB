@@ -1,69 +1,5 @@
-#include <iostream>
-#include <fstream>
-#include <cmath>
-#include "vector.h"
-#include <omp.h>
-using std::cout, std::endl;
-
-const int Lx = 128;
-const int Ly = 256;
-
-const int Q = 9;
-
-
-const double a = 6.93;//7.225;
-const double RT = a/12.0;//.5;
-const double c = std::sqrt(3.0*RT);
-const double phi_l = 0.0317;//0.0;
-const double phi_h = 0.2554;//0.278575;
-const double rho_l = 1;
-const double rho_h =  3;
-const double kappa = 0;
-const double g = 0.008/Ly;
-const double ps = 0.018;
-
-
-
-const double tau =  0.56;
-const double Utau = 1.0/tau;
-const double DtaumUsDtau = (2*tau - 1 )/(2*tau);
-
-class LatticeBoltzmann{
-private:
-    double w[Q]; //weights
-    int Vx[Q], Vy[Q]; //velocity vectors
-    vector3D V[Q];
-    
-    //Distribution Functions
-    double *f_bar, *f_bar_new;
-    double *g_bar, *g_bar_new;
-
-    //Potential
-    double *PSI;
-
-
-public:
-    LatticeBoltzmann(void);
-    ~LatticeBoltzmann(void);
-    int n(int ix, int iy, int i){return (ix*Ly+iy)*Q+i;};
-    double Psi(int ix, int iy);
-    double rho(int ix, int iy, double phi);
-    double phi(int ix, int iy, bool Usenew);
-    double pressure(int ix, int iy, vector3D U, vector3D grad, bool UseNew);
-    double feq(double rho0, vector3D U0, int i);
-    double geq(double p0, double rho0, vector3D U0, int i);
-    double gradient_x(int ix, int iy);
-    double gradient_y(int ix, int iy);
-    double Gamma(vector3D U0, int i);
-    vector3D U(int ix, int iy, vector3D G, double rho0, bool UseNew);
-    vector3D gradient(int ix, int iy);
-    void Collision(void);
-    void Advection(void);
-    void ImposeFields(void);
-    void Start(double Ux0, double Uy0);
-    void print( const char * NombreArchivo);
-    
-};
+#include"Latticeboltzmann.h"
+#include<fstream>
 
 LatticeBoltzmann::LatticeBoltzmann(void){
     //set wheights
@@ -238,7 +174,7 @@ void LatticeBoltzmann::Start(double Ux0, double Uy0){
 
 void LatticeBoltzmann::Collision(void){
     
-    int ix, iy, i, n0; 
+    int ix, iy, n0; 
     #pragma omp parallel for collapse(2)  
     for(ix=0;ix<Lx;ix++){
         for(iy=0;iy<Ly;iy++){   
@@ -248,7 +184,7 @@ void LatticeBoltzmann::Collision(void){
 
     double gammau, gamma0, phi0, rho0, P0;
     vector3D grad, G, U;
-    #pragma omp parallel for collapse(2) private(phi0, grad, rho0, G, U, P0, i, n0, gamma0, gammau)
+    #pragma omp parallel for collapse(2) private(phi0, grad, rho0, G, U, P0, n0, gamma0, gammau)
     for(int ix = 0; ix < Lx; ix++) {
         for(int iy = 0; iy < Ly; iy++) {  
             phi0 = LatticeBoltzmann::phi(ix, iy, false);
@@ -273,7 +209,7 @@ void LatticeBoltzmann::Collision(void){
 }
 
 void LatticeBoltzmann::ImposeFields(void){
-    int i, ix, iy, n0; vector3D G, U;
+    int i, ix, iy, n0; vector3D U;
     U.load(0,0,0);
     for (ix = 0; ix < Lx; ix++){
         for (iy = 0; iy < 1; iy ++){
@@ -313,10 +249,9 @@ void LatticeBoltzmann::Advection(void){
 }
 
 void LatticeBoltzmann::print(const char * Namefile){
-    std::ofstream MyFile(Namefile); double rho0, phi, pressure; int ix, iy;
+    std::ofstream MyFile(Namefile); double rho0, phi;  int ix, iy;
     for(ix=0;ix<Lx;ix+=1){
         for(iy=0;iy<Ly;iy+=1){
-            vector3D U,G, grad;
             phi = LatticeBoltzmann::phi(ix,iy,true);
             rho0 = LatticeBoltzmann::rho(ix,iy,phi);
             
@@ -327,42 +262,4 @@ void LatticeBoltzmann::print(const char * Namefile){
         MyFile<<std::endl;
     }
     MyFile.close();
-}
-
-void StartAnimation(void){
-  cout<<"set terminal gif animate"<<endl; 
-  cout<<"set output 'phases.gif'"<<endl;
-  cout<<"unset key"<<endl;
-  cout<<"set size ratio 4"<<endl;
-  cout<<"set xrange [0:"<<Lx<<"]"<<endl;
-  cout<<"set yrange [0:"<<Ly<<"]"<<endl;
-  cout<<"set cbrange[0.9:3.1]"<<endl;
-}
-void StartFrame(void){
-    cout<<"plot 0,0 ";
-    cout<<", 'data.dat' w image";
-}
-void EndFrame(void){
-    cout<<endl;
-}
-
-int main(void){
-    StartAnimation();
-    LatticeBoltzmann instability;
-    int t, tmax = 400000;
-    double Ux0 = 0; double Uy0 = 0;
-    instability.Start(Ux0, Uy0);
-    for(t=0;t<tmax;t++){
-        //std::cout<<std::endl<<"colision "<<t+1<<std::endl;
-       instability.Collision();
-       instability.ImposeFields();
-       instability.Advection();
-       if (t%500 == 0){
-    
-       instability.print("data.dat");
-       StartFrame();
-       EndFrame();}
-    }
-    //inestability.print("datos.dat");
-    return 0;
 }
